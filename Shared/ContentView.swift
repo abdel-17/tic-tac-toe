@@ -42,21 +42,18 @@ struct ContentView : View {
                                height: bounds.size.height)
                 }
                 
-                VStack {
-                    Button(isFirstTurn ? "RESET" : "NEW GAME") {
-                        withAnimation {
-                            if isFirstTurn {
-                                score = (0, 0)
-                            } else {
-                                game.reset()
-                                isFirstTurn = true
-                            }
+                Button(isFirstTurn ? "RESET" : "NEW GAME") {
+                    withAnimation {
+                        if isFirstTurn {
+                            score = (0, 0)
+                        } else {
+                            game.reset()
+                            isFirstTurn = true
                         }
                     }
-                    .foregroundColor(.red)
-                    .buttonStyle(PlainButtonStyle())
-                    
                 }
+                .foregroundColor(.red)
+                .buttonStyle(PlainButtonStyle())
             }
             .font(.title.bold())
             .foregroundColor(.white)
