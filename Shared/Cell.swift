@@ -1,19 +1,34 @@
 import SwiftUI
 
-/// A shape that draws a tic-tac-toe player.
+/// A square-like shape that draws a tic-tac-toe player.
 struct Cell: Shape {
-    /// The player at this cell.
-    let player: TicTacToeGrid.Player?
+    @ObservedObject var model: ViewModel
+    
+    /// The index of this cell according to row-major order.
+    let index: Int
     
     /// The width of the drawing line.
     let lineWidth: CGFloat
     
-    /// The completion percentage of
-    /// this cell's animation.
+    /// The animation completion percentage of this cell.
     var animationCompletion: Double
     
+    init(model: ViewModel, index: Int, lineWidth: CGFloat) {
+        self.model = model
+        self.index = index
+        self.lineWidth = lineWidth
+        self.animationCompletion = model.animationCompletions[index]
+    }
+    
+    /// The duration of a cell's animation.
+    static var animationDuration: Double { 0.5 }
+    
+    /// The animation performed by a cell.
+    static var animation: Animation {
+        .easeOut(duration: animationDuration)
+    }
+    
     var animatableData: Double {
-        // Animate changes to the completion percentage.
         get { animationCompletion }
         
         set { animationCompletion = newValue }
@@ -23,92 +38,67 @@ struct Cell: Shape {
         // Stroke with a rounded line of the given width.
         self.stroke(style: StrokeStyle(lineWidth: lineWidth,
                                        lineCap: .round))
+            .foregroundColor(foregroundColor)
+            .aspectRatio(1, contentMode: .fit)
+            .animation(Cell.animation, value: isMatching)
+    }
+    
+    /// The player at this cell.
+    private var player: TicTacToe.Player? {
+        model.game.grid[index]
+    }
+    
+    /// A Boolean value to check if this cell is matching.
+    private var isMatching: Bool {
+        model.game.isMatching(at: index)
+    }
+    
+    /// The foreground color of this cell.
+    private var foregroundColor: Color? {
+        if isMatching {
+            return .green
+        }
+        switch player {
+        case .x:
+            return .red
+        case .o:
+            return .blue
+        case nil:
+            return nil
+        }
     }
     
     func path(in rect: CGRect) -> Path {
-        // Draw on 80% of the inner space.
-        let insetRect = rect.insetBy(dx: 0.2 * rect.width,
-                                     dy: 0.2 * rect.height)
+        // Draw nothing if the cell is empty.
+        guard let player = player else {
+            return Path()
+        }
+        // Add 20% padding.
+        let rect = rect.insetBy(dx: 0.2 * rect.width,
+                                dy: 0.2 * rect.height)
         return Path { path in
             switch player {
             case .x:
-                /// Draws a percentage of the line from the upper
-                /// corner of the cell to its lower corner.
-                func drawLine(startX: CGFloat, endX: CGFloat, percentage: CGFloat) {
-                    // Start drawing from the top of the rectangle...
-                    let start = CGPoint(x: startX, y: insetRect.minY)
-                    let end = start.applying(
-                        // ...to the bottom.
-                        CGAffineTransform(translationX: percentage * (endX - startX),
-                                          y: percentage * insetRect.height)
-                    )
-                    path.move(to: start)
-                    path.addLine(to: end)
-                }
-                // We first draw the line from the upper left
-                // corner completely, then start drawing the
-                // upper right corner line. 50% marks the end
-                // of this animation, so its completion after
-                // stays fixed at 100%. If animation completion
-                // is 0%, a point is drawn, so we check for that.
-                if animationCompletion > 0 {
-                    drawLine(startX: insetRect.minX,
-                             endX: insetRect.maxX,
-                             percentage: min(2 * animationCompletion, 1))
-                }
-                // Draw the upper right corner line only after 50%.
-                if animationCompletion >= 0.5 {
-                    drawLine(startX: insetRect.maxX,
-                             endX: insetRect.minX,
-                             percentage: 2 * animationCompletion - 1)
-                }
+                // We first draw a line from the upper left corner
+                // to the lower right corner completely, then after
+                // that's done, we draw the other diagonal line.
+                let upperLeft = CGPoint(x: rect.minX, y: rect.minY)
+                let upperRight = CGPoint(x: rect.maxX, y: rect.minY)
+                let lowerLeft = CGPoint(x: rect.minX, y: rect.maxY)
+                let lowerRight = CGPoint(x: rect.maxX, y: rect.maxY)
+                GridLines.draw(in: &path,
+                               lines: [(upperLeft, lowerRight),
+                                       (upperRight, lowerLeft)],
+                               completionPercentage: animationCompletion)
             case .o:
-                // Draw a centered arc from 0 to 360 * (animation)% degrees.
-                path.addArc(center: CGPoint(x: insetRect.midX, y: insetRect.midY),
-                            radius: insetRect.width / 2,
+                // Draw a centered arc from 0° to 360° * (animation)%.
+                path.addArc(center: CGPoint(x: rect.midX,
+                                            y: rect.midY),
+                            radius: rect.width / 2,
                             startAngle: .degrees(0),
                             endAngle: .degrees(360 * animationCompletion),
                             clockwise: false)
-                //path.closeSubpath()
-            case nil:
-                // Empty cell. Draw nothing.
-                break
             }
         }
     }
 }
-
-struct CellPreviews: PreviewProvider {
-    /// A view to test the animation of the cell.
-    struct AnimationPreview: View {
-        @State var animationPercentage = 0.0
-        
-        var body: some View {
-            VStack {
-                HStack {
-                    ForEach([.x, .o] as [TicTacToeGrid.Player],
-                            id: \.self) { player in
-                        Cell(player: player,
-                             lineWidth: 5,
-                             animationCompletion: animationPercentage)
-                        .aspectRatio(contentMode: .fit)
-                    }
-                }
-
-                Button("Start Animation") {
-                    withAnimation(
-                        .easeInOut(duration: 1)
-                        .repeatForever(autoreverses: true)) {
-                        animationPercentage = 1
-                    }
-                }
-            }
-        }
-    }
-    
-    static var previews: some View {
-        AnimationPreview()
-            .padding()
-    }
-}
-

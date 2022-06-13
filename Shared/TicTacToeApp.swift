@@ -6,5 +6,8 @@ struct TicTacToeApp: App {
         WindowGroup {
             ContentView()
         }
+        #if os(macOS)
+        .windowStyle(.hiddenTitleBar)
+        #endif
     }
 }

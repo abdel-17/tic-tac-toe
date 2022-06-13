@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9E80686F285233E600E34E27 /* TicTacToeGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80686E285233E600E34E27 /* TicTacToeGrid.swift */; };
-		9E806870285233E600E34E27 /* TicTacToeGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80686E285233E600E34E27 /* TicTacToeGrid.swift */; };
+		9E80686F285233E600E34E27 /* TicTacToe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80686E285233E600E34E27 /* TicTacToe.swift */; };
+		9E806870285233E600E34E27 /* TicTacToe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80686E285233E600E34E27 /* TicTacToe.swift */; };
 		9E8068752852344300E34E27 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8068742852344300E34E27 /* Cell.swift */; };
 		9E8068762852344300E34E27 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8068742852344300E34E27 /* Cell.swift */; };
 		9E806881285238EC00E34E27 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E806880285238EC00E34E27 /* ContentView.swift */; };
@@ -17,17 +17,26 @@
 		9E806885285238F300E34E27 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E806883285238F300E34E27 /* Assets.xcassets */; };
 		9EB19212282B8FDC00319A79 /* TicTacToeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB19202282B8FDB00319A79 /* TicTacToeApp.swift */; };
 		9EB19213282B8FDC00319A79 /* TicTacToeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB19202282B8FDB00319A79 /* TicTacToeApp.swift */; };
+		9EF0D3C3285516BB005E280F /* GridLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF0D3C2285516BB005E280F /* GridLines.swift */; };
+		9EF0D3C4285516BB005E280F /* GridLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF0D3C2285516BB005E280F /* GridLines.swift */; };
+		9EF0D3C6285516CB005E280F /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF0D3C5285516CB005E280F /* GridView.swift */; };
+		9EF0D3C7285516CB005E280F /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF0D3C5285516CB005E280F /* GridView.swift */; };
+		9EF0D3C928551A99005E280F /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF0D3C828551A99005E280F /* ViewModel.swift */; };
+		9EF0D3CA28551A99005E280F /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF0D3C828551A99005E280F /* ViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		9E80686E285233E600E34E27 /* TicTacToeGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTacToeGrid.swift; sourceTree = "<group>"; };
+		9E80686E285233E600E34E27 /* TicTacToe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTacToe.swift; sourceTree = "<group>"; };
 		9E8068742852344300E34E27 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		9E806880285238EC00E34E27 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9E806883285238F300E34E27 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9EB19202282B8FDB00319A79 /* TicTacToeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeApp.swift; sourceTree = "<group>"; };
-		9EB19209282B8FDC00319A79 /* TicTacToe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacToe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9EB19209282B8FDC00319A79 /* Tic-Tac-Toe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tic-Tac-Toe.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EB1920F282B8FDC00319A79 /* TicTacToe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacToe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EB19211282B8FDC00319A79 /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
+		9EF0D3C2285516BB005E280F /* GridLines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLines.swift; sourceTree = "<group>"; };
+		9EF0D3C5285516CB005E280F /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
+		9EF0D3C828551A99005E280F /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,11 +69,14 @@
 		9EB19201282B8FDA00319A79 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				9E80686E285233E600E34E27 /* TicTacToeGrid.swift */,
+				9E80686E285233E600E34E27 /* TicTacToe.swift */,
 				9E8068742852344300E34E27 /* Cell.swift */,
+				9EF0D3C2285516BB005E280F /* GridLines.swift */,
 				9EB19202282B8FDB00319A79 /* TicTacToeApp.swift */,
 				9E806883285238F300E34E27 /* Assets.xcassets */,
 				9E806880285238EC00E34E27 /* ContentView.swift */,
+				9EF0D3C5285516CB005E280F /* GridView.swift */,
+				9EF0D3C828551A99005E280F /* ViewModel.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -72,7 +84,7 @@
 		9EB1920A282B8FDC00319A79 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9EB19209282B8FDC00319A79 /* TicTacToe.app */,
+				9EB19209282B8FDC00319A79 /* Tic-Tac-Toe.app */,
 				9EB1920F282B8FDC00319A79 /* TicTacToe.app */,
 			);
 			name = Products;
@@ -103,7 +115,7 @@
 			);
 			name = "TicTacToe (iOS)";
 			productName = "TicTacToe (iOS)";
-			productReference = 9EB19209282B8FDC00319A79 /* TicTacToe.app */;
+			productReference = 9EB19209282B8FDC00319A79 /* Tic-Tac-Toe.app */;
 			productType = "com.apple.product-type.application";
 		};
 		9EB1920E282B8FDC00319A79 /* TicTacToe (macOS) */ = {
@@ -184,10 +196,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E80686F285233E600E34E27 /* TicTacToeGrid.swift in Sources */,
+				9EF0D3C3285516BB005E280F /* GridLines.swift in Sources */,
+				9E80686F285233E600E34E27 /* TicTacToe.swift in Sources */,
 				9E806881285238EC00E34E27 /* ContentView.swift in Sources */,
 				9E8068752852344300E34E27 /* Cell.swift in Sources */,
+				9EF0D3C6285516CB005E280F /* GridView.swift in Sources */,
 				9EB19212282B8FDC00319A79 /* TicTacToeApp.swift in Sources */,
+				9EF0D3C928551A99005E280F /* ViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,10 +210,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E806870285233E600E34E27 /* TicTacToeGrid.swift in Sources */,
+				9EF0D3C4285516BB005E280F /* GridLines.swift in Sources */,
+				9E806870285233E600E34E27 /* TicTacToe.swift in Sources */,
 				9E806882285238EC00E34E27 /* ContentView.swift in Sources */,
 				9E8068762852344300E34E27 /* Cell.swift in Sources */,
+				9EF0D3C7285516CB005E280F /* GridView.swift in Sources */,
 				9EB19213282B8FDC00319A79 /* TicTacToeApp.swift in Sources */,
+				9EF0D3CA28551A99005E280F /* ViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,14 +347,14 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.abdelrahman.TicTacToe;
-				PRODUCT_NAME = TicTacToe;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.abdelrahman.tic-tac-toe";
+				PRODUCT_NAME = "Tic-Tac-Toe";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -359,14 +377,14 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.abdelrahman.TicTacToe;
-				PRODUCT_NAME = TicTacToe;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.abdelrahman.tic-tac-toe";
+				PRODUCT_NAME = "Tic-Tac-Toe";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -393,7 +411,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.abdelrahman.TicTacToe;
 				PRODUCT_NAME = TicTacToe;
@@ -421,7 +439,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.3;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.abdelrahman.TicTacToe;
 				PRODUCT_NAME = TicTacToe;

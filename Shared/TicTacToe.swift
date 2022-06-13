@@ -1,8 +1,8 @@
-/// A  tic-tac-toe grid.
+/// A type representing a tic-tac-toe game.
 ///
 /// Contains the logic of the game.
-struct TicTacToeGrid {
-    enum Player {
+struct TicTacToe {
+    enum Player: CustomStringConvertible {
         case x, o
         
         var opponent: Player {
@@ -13,12 +13,21 @@ struct TicTacToeGrid {
                 return .x
             }
         }
+        
+        var description: String {
+            switch self {
+            case .x:
+                return "X"
+            case .o:
+                return "O"
+            }
+        }
     }
     
     /// The grid stored in a row-major order.
     ///
     /// `nil` represents an empty position.
-    private(set) var players: [Player?] = Array(repeating: nil,
+    private(set) var grid: [Player?] = Array(repeating: nil,
                                                 count: 9)
     
     /// The current-turn player.
@@ -49,8 +58,8 @@ struct TicTacToeGrid {
         turns == 0
     }
     
-    /// True iff the game has ended.
-    var gameHasEnded: Bool {
+    /// True iff this game has ended.
+    var hasEnded: Bool {
         // Either the player won the game,
         // or the board is filled entirely.
         !matchingIndices.isEmpty || turns == 9
@@ -58,7 +67,7 @@ struct TicTacToeGrid {
     
     /// Returns true iff the grid is empty at `index`.
     func isEmpty(at index: Int) -> Bool {
-        players[index] == nil
+        grid[index] == nil
     }
     
     /// Returns true iff the player at the given index is matching
@@ -107,18 +116,18 @@ struct TicTacToeGrid {
     mutating func play(at index: Int) {
         // The given position must be empty
         // and the game must still be ongoing.
-        precondition(isEmpty(at: index) && !gameHasEnded)
-        players[index] = currentPlayer
+        precondition(isEmpty(at: index) && !hasEnded)
+        grid[index] = currentPlayer
         // Match along all possible directions.
-        for (i, j, k) in TicTacToeGrid.pairsAdjacent(to: index) {
+        for (i, j, k) in TicTacToe.pairsAdjacent(to: index) {
             // Not matching. Try the next one.
-            guard players[i] == players[j] && players[j] == players[k] else { continue }
+            guard grid[i] == grid[j] && grid[j] == grid[k] else { continue }
             for matchingIndex in [i, j, k] {
                 matchingIndices.insert(matchingIndex)
             }
         }
         turns += 1
-        if !gameHasEnded {
+        if !hasEnded {
              // Continue playing.
              currentPlayer = currentPlayer.opponent
         }
@@ -126,21 +135,21 @@ struct TicTacToeGrid {
 }
 
 // MARK: - AI
-extension TicTacToeGrid {
+extension TicTacToe {
     /// Returns a score evaluation to determine
     /// how significant playing at the given index
     /// is to winning the game.
     private func heuristic(move: Int) -> Int {
         assert(isEmpty(at: move))
         // Give each adjacent three-pair a score.
-        return TicTacToeGrid.pairsAdjacent(to: move).map { i, j, k in
+        return TicTacToe.pairsAdjacent(to: move).map { i, j, k in
             // Count the number of occurances of each player.
             // We assume the current-turn player has already
             // played (but not yet set in the board array),
             // so their count starts at 1.
             var count = (player: 1, opponent: 0)
             for index in [i, j, k] {
-                switch players[index] {
+                switch grid[index] {
                 case currentPlayer:
                     count.player += 1
                 case currentPlayer.opponent:
@@ -183,8 +192,8 @@ extension TicTacToeGrid {
     /// a heuristic assigned to each move.
     /// If the game has ended, `nil` is returned.
     func bestMove() -> Int? {
-        guard !gameHasEnded else { return nil }
-        return players.indices
+        guard !hasEnded else { return nil }
+        return grid.indices
             // Filter out the occupied positions
             .filter { index in
                 isEmpty(at: index)
