@@ -30,11 +30,10 @@ struct Cell: Shape {
     }
     
     var body: some View {
-        // Stroke with a rounded line of the given width.
-        self.stroke(style: StrokeStyle(lineWidth: lineWidth,
+        self.trim(from: 0, to: animationCompletion)
+            .stroke(style: StrokeStyle(lineWidth: lineWidth,
                                        lineCap: .round))
             .foregroundColor(foregroundColor)
-            .aspectRatio(1, contentMode: .fit)
             .animation(Cell.animation, value: isMatching)
     }
     
@@ -64,28 +63,26 @@ struct Cell: Shape {
         return Path { path in
             switch player {
             case .x:
-                let upperLeft = CGPoint(x: rect.minX, y: rect.minY)
-                let lowerRight = CGPoint(x: rect.maxX, y: rect.maxY)
-                // Draw the first line when animationCompletion
-                // is in 0...50%.
-                path.addLine(from: upperLeft,
-                             to: lowerRight,
-                             percentage: min(2 * animationCompletion, 1))
-                // Draw the second line when animationCompletion
-                // is in 50%...100%
-                guard animationCompletion > 0.5 else { return }
-                let upperRight = CGPoint(x: rect.maxX, y: rect.minY)
-                let lowerLeft = CGPoint(x: rect.minX, y: rect.maxY)
-                path.addLine(from: upperRight,
-                             to: lowerLeft,
-                             percentage: 2 * animationCompletion - 1)
+                // Draw two diagonal lines.
+                let upperLeft = CGPoint(x: rect.minX,
+                                        y: rect.minY)
+                let lowerRight = CGPoint(x: rect.maxX,
+                                         y: rect.maxY)
+                path.move(to: upperLeft)
+                path.addLine(to: lowerRight)
+                let upperRight = CGPoint(x: rect.maxX,
+                                         y: rect.minY)
+                let lowerLeft = CGPoint(x: rect.minX,
+                                        y: rect.maxY)
+                path.move(to: upperRight)
+                path.addLine(to: lowerLeft)
             case .o:
-                // Draw a centered arc from 0° to 360° * animationCompletion.
+                // Draw a centered arc.
                 path.addArc(center: CGPoint(x: rect.midX,
                                             y: rect.midY),
                             radius: rect.width / 2,
                             startAngle: .degrees(0),
-                            endAngle: .degrees(360 * animationCompletion),
+                            endAngle: .degrees(360),
                             clockwise: false)
             }
         }

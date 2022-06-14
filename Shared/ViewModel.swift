@@ -67,11 +67,9 @@ extension Task where Success == Never, Failure == Never {
         displayedMessage = newMessage
     }
     
-    /// Performs the grid animation.
-    func initializeGrid() async {
-        withAnimation(.linear(duration: 1)) {
-            gridAnimationCompletion = 1
-        }
+    /// Starts drawing the grid lines.
+    func startGridAnimation() async {
+        gridAnimationCompletion = 1
         await Task.sleep(seconds: 1)
         isAnimating = false
     }
@@ -109,12 +107,6 @@ extension Task where Success == Never, Failure == Never {
         isAnimating = false
     }
     
-    /// Resets the game.
-    private func resetGame() {
-        game = TicTacToe(startingPlayer: isPVE ? .x : game.currentPlayer)
-        updateDisplayedMessage()
-    }
-    
     /// Starts a new game.
     ///
     /// In pvp mode, the starting player of the new game
@@ -122,7 +114,8 @@ extension Task where Success == Never, Failure == Never {
     /// player is always x.
     func startNewGame() async {
         await resetCells()
-        resetGame()
+        game = TicTacToe(startingPlayer: isPVE ? .x : game.currentPlayer)
+        updateDisplayedMessage()
     }
     
     /// Switches between pve and pvp mode.

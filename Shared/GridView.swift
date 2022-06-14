@@ -33,11 +33,15 @@ struct GridView: View {
                 }
             }
         }
+        .aspectRatio(1, contentMode: .fit)
         .background(GridLines(lineWidth: lineWidth,
                               animationCompletion: model.gridAnimationCompletion))
         .task {
-            await model.initializeGrid()
+            await model.startGridAnimation()
         }
         .disabled(model.isAnimating)
+        #if os(macOS)
+        .frame(minWidth: 300)
+        #endif
     }
 }
