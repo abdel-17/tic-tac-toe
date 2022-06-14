@@ -27,6 +27,7 @@ struct GridView: View {
                                  lineWidth: lineWidth,
                                  animationCompletion: model.cellAnimationCompletions[index])
                         }
+                        .buttonStyle(.borderless)
                         .disabled(!model.game.isEmpty(at: index) &&
                                   !model.game.hasEnded)
                     }

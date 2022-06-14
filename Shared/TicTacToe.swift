@@ -192,7 +192,7 @@ extension TicTacToe {
     /// If the game ended, `nil` is returned.
     func moveWithBestHeuristic() -> Int? {
         grid.indices
-            // Filter out the occupied positions
+            // Filter out the occupied positions.
             .filter { index in
                 isEmpty(at: index)
             }
