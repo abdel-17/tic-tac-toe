@@ -34,7 +34,7 @@ struct TicTacToe {
     private(set) var currentPlayer: Player
     
     /// The indices of the elements matching along either
-    /// on of the horizontal, vertical, and diagnoal directions.
+    /// one of the horizontal, vertical, and diagnoal directions.
     private var matchingIndices: Set<Int> = []
     
     /// The number of turns that have passed.
