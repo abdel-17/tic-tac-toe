@@ -1,25 +1,7 @@
 import SwiftUI
 
-/// A square-like shape that draws a tic-tac-toe player.
+/// A shape that draws a tic-tac-toe player in a square.
 struct Cell: Shape {
-    @ObservedObject var model: ViewModel
-    
-    /// The index of this cell according to row-major order.
-    let index: Int
-    
-    /// The width of the drawing line.
-    let lineWidth: CGFloat
-    
-    /// The animation completion percentage of this cell.
-    var animationCompletion: Double
-    
-    init(model: ViewModel, index: Int, lineWidth: CGFloat) {
-        self.model = model
-        self.index = index
-        self.lineWidth = lineWidth
-        self.animationCompletion = model.animationCompletions[index]
-    }
-    
     /// The duration of a cell's animation.
     static var animationDuration: Double { 0.5 }
     
@@ -27,6 +9,19 @@ struct Cell: Shape {
     static var animation: Animation {
         .easeOut(duration: animationDuration)
     }
+    
+    /// The player at this cell.
+    let player: TicTacToe.Player?
+    
+    /// A Boolean value to check if the player at this cell
+    /// is matching along any of the 4 directions.
+    let isMatching: Bool
+    
+    /// The width of the drawing line.
+    let lineWidth: Double
+    
+    /// The animation completion percentage of this cell.
+    var animationCompletion: Double
     
     var animatableData: Double {
         get { animationCompletion }
@@ -41,16 +36,6 @@ struct Cell: Shape {
             .foregroundColor(foregroundColor)
             .aspectRatio(1, contentMode: .fit)
             .animation(Cell.animation, value: isMatching)
-    }
-    
-    /// The player at this cell.
-    private var player: TicTacToe.Player? {
-        model.game.grid[index]
-    }
-    
-    /// A Boolean value to check if this cell is matching.
-    private var isMatching: Bool {
-        model.game.isMatching(at: index)
     }
     
     /// The foreground color of this cell.
@@ -79,19 +64,23 @@ struct Cell: Shape {
         return Path { path in
             switch player {
             case .x:
-                // We first draw a line from the upper left corner
-                // to the lower right corner completely, then after
-                // that's done, we draw the other diagonal line.
                 let upperLeft = CGPoint(x: rect.minX, y: rect.minY)
+                let lowerRight = CGPoint(x: rect.maxX, y: rect.maxY)
+                // Draw the first line when animationCompletion
+                // is in 0...50%.
+                path.addLine(from: upperLeft,
+                             to: lowerRight,
+                             percentage: min(2 * animationCompletion, 1))
+                // Draw the second line when animationCompletion
+                // is in 50%...100%
+                guard animationCompletion > 0.5 else { return }
                 let upperRight = CGPoint(x: rect.maxX, y: rect.minY)
                 let lowerLeft = CGPoint(x: rect.minX, y: rect.maxY)
-                let lowerRight = CGPoint(x: rect.maxX, y: rect.maxY)
-                GridLines.draw(in: &path,
-                               lines: [(upperLeft, lowerRight),
-                                       (upperRight, lowerLeft)],
-                               completionPercentage: animationCompletion)
+                path.addLine(from: upperRight,
+                             to: lowerLeft,
+                             percentage: 2 * animationCompletion - 1)
             case .o:
-                // Draw a centered arc from 0° to 360° * (animation)%.
+                // Draw a centered arc from 0° to 360° * animationCompletion.
                 path.addArc(center: CGPoint(x: rect.midX,
                                             y: rect.midY),
                             radius: rect.width / 2,

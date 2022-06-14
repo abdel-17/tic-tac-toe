@@ -185,13 +185,10 @@ extension TicTacToe {
         .reduce(0, +)
     }
     
-    /// Returns the best index to play at
-    /// for the current-turn player.
+    /// Returns the move (index) having the best heuristic.
     ///
-    /// The choice of index is determined by
-    /// a heuristic assigned to each move.
-    /// If the game has ended, `nil` is returned.
-    func bestMove() -> Int? {
+    /// If the game ended, `nil` is returned.
+    func moveWithBestHeuristic() -> Int? {
         guard !hasEnded else { return nil }
         return grid.indices
             // Filter out the occupied positions

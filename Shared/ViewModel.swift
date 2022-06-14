@@ -1,74 +1,118 @@
 import SwiftUI
 
+extension Array where Element == Double {
+    /// An array of 9 doubles initialized with zeros.
+    static var allZeros: [Double] {
+        Array(repeating: 0.0, count: 9)
+    }
+}
+
+extension Task where Success == Never, Failure == Never {
+    /// Suspends the current task for the given time in seconds.
+    static func sleep(seconds: Double) async {
+        do {
+            try await Task.sleep(nanoseconds: UInt64(seconds * 1e9))
+        } catch {
+            #if DEBUG
+            print("Sleep task interrupted!")
+            #endif
+        }
+    }
+}
+
 /// The view model holding the data presented to the user.
 ///
 /// This class is marked with `@MainActor` to update
 /// the UI on the main thread.
 @MainActor class ViewModel: ObservableObject {
-    /// A Boolean value to check the game mode (pvp or pve).
-    @Published private(set) var isPVE = true
-    
     @Published private(set) var game = TicTacToe(startingPlayer: .x)
     
-    /// The animation completion percentage of each cell.
-    @Published private(set) var animationCompletions = Array(repeating: 0.0,
-                                                             count: 9)
+    /// A Boolean value to switch between player-vs-enemy
+    /// and player-vs-player game modes.
+    @Published private(set) var isPVE = true
     
-    /// A Boolean value to keep track of animating cells.
-    @Published private(set) var isAnimating = false
+    /// The animation completion percentage of the grid.
+    @Published private(set) var gridAnimationCompletion = 0.0
+    
+    /// The animation completion percentage of each cell.
+    @Published private(set) var cellAnimationCompletions = Array.allZeros
+    
+    /// A Boolean value to check if an animation is occuring.
+    @Published private(set) var isAnimating = true
     
     /// The message displayed to the user.
-    var displayedMessage: String {
-        guard !isAnimating else { return "..." }
-        if game.hasEnded {
-            guard let winner = game.winner else { return "Draw!" }
-            if isPVE {
-                switch winner {
-                case .x:
-                    return "You win!"
-                case .o:
-                    return "You lose!"
+    @Published private(set) var displayedMessage = "Your turn!"
+    
+    /// Updates the displayed message
+    private func updateDisplayedMessage() {
+        var newMessage: String {
+            if game.hasEnded {
+                guard let winner = game.winner else { return "Draw!" }
+                if isPVE {
+                    switch winner {
+                    case .x:
+                        return "You won!"
+                    case .o:
+                        return "You lost!"
+                    }
                 }
+                return "Player \(winner) won!"
             }
-            return "Player \(winner) won!"
+            // If we are in pve mode, we don't need
+            // to check if the current player is x
+            // because the text is hidden while the
+            // opponent is playing.
+            return isPVE ? "Your turn!" : "Player \(game.currentPlayer)"
         }
-        // If we are in pve mode, we don't need
-        // to check if the current player is x
-        // because `isAnimating` is always true
-        // while the opponent is playing.
-        return isPVE ? "Your turn!" : "Player \(game.currentPlayer)"
+        displayedMessage = newMessage
     }
     
-    /// Sets `isAnimating` to `true`, then after
-    /// the animation is done, sets it back to `false`.
-    private func toggleIsAnimating() {
-        isAnimating = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + Cell.animationDuration) { [weak self] in
-            self?.isAnimating = false
+    /// Performs the grid animation.
+    func initializeGrid() async {
+        withAnimation(.linear(duration: 1)) {
+            gridAnimationCompletion = 1
         }
+        await Task.sleep(seconds: 1)
+        isAnimating = false
     }
     
-    /// Sets the current-turn player at `index`.
-    private func setPlayer(at index: Int) {
+    /// Sets the current-turn player at `index`,
+    /// and returns after the animation is finished.
+    private func setPlayer(at index: Int) async {
         game.play(at: index)
         withAnimation(Cell.animation) {
-            animationCompletions[index] = 1
+            cellAnimationCompletions[index] = 1
         }
-        // If the game ended, do not toggle `isAnimating`
-        // to show the message immediately.
-        guard !game.hasEnded else { return }
-        toggleIsAnimating()
+        await Task.sleep(seconds: Cell.animationDuration)
     }
     
-    /// Plays the game at `index`.
-    func play(at index: Int) {
-        setPlayer(at: index)
-        if isPVE {
-            guard let move = game.bestMove() else { return }
-            DispatchQueue.main.asyncAfter(deadline: .now() + Cell.animationDuration) { [weak self] in
-                self?.setPlayer(at: move)
-            }
+    /// Plays the game at `index` with animation.
+    func play(at index: Int) async {
+        isAnimating = true
+        await setPlayer(at: index)
+        if isPVE, let move = game.moveWithBestHeuristic() {
+            await setPlayer(at: move)
         }
+        isAnimating = false
+        updateDisplayedMessage()
+    }
+    
+    /// Resets the cells with animation.
+    private func resetCells() async {
+        // Reset only when needed.
+        guard !game.isFirstTurn else { return }
+        isAnimating = true
+        withAnimation(Cell.animation) {
+            cellAnimationCompletions = Array.allZeros
+        }
+        await Task.sleep(seconds: Cell.animationDuration)
+        isAnimating = false
+    }
+    
+    /// Resets the game.
+    private func resetGame() {
+        game = TicTacToe(startingPlayer: isPVE ? .x : game.currentPlayer)
+        updateDisplayedMessage()
     }
     
     /// Starts a new game.
@@ -76,26 +120,14 @@ import SwiftUI
     /// In pvp mode, the starting player of the new game
     /// is the current player. In pve, however, the starting
     /// player is always x.
-    func startNewGame() {
-        let startingPlayer = isPVE ? .x : game.currentPlayer
-        guard !game.isFirstTurn else {
-            // No reset animation is needed.
-            game = TicTacToe(startingPlayer: startingPlayer)
-            return
-        }
-        withAnimation(Cell.animation) {
-            animationCompletions = Array(repeating: 0,
-                                         count: 9)
-        }
-        toggleIsAnimating()
-        DispatchQueue.main.asyncAfter(deadline: .now() + Cell.animationDuration) { [weak self] in
-            self?.game = TicTacToe(startingPlayer: startingPlayer)
-        }
+    func startNewGame() async {
+        await resetCells()
+        resetGame()
     }
     
     /// Switches between pve and pvp mode.
-    func switchGameMode() {
+    func switchGameMode() async {
         isPVE.toggle()
-        startNewGame()
+        await startNewGame()
     }
 }
