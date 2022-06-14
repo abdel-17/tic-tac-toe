@@ -120,8 +120,10 @@ struct TicTacToe {
         grid[index] = currentPlayer
         // Match along all possible directions.
         for (i, j, k) in TicTacToe.pairsAdjacent(to: index) {
-            // Not matching. Try the next one.
-            guard grid[i] == grid[j] && grid[j] == grid[k] else { continue }
+            guard grid[i] == grid[j] && grid[j] == grid[k] else {
+                // Not matching. Try the next one.
+                continue
+            }
             for matchingIndex in [i, j, k] {
                 matchingIndices.insert(matchingIndex)
             }
@@ -189,8 +191,7 @@ extension TicTacToe {
     ///
     /// If the game ended, `nil` is returned.
     func moveWithBestHeuristic() -> Int? {
-        guard !hasEnded else { return nil }
-        return grid.indices
+        grid.indices
             // Filter out the occupied positions
             .filter { index in
                 isEmpty(at: index)
