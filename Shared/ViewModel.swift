@@ -88,7 +88,7 @@ extension Task where Success == Never, Failure == Never {
     func play(at index: Int) async {
         isAnimating = true
         await setPlayer(at: index)
-        if isPVE, let move = game.moveWithBestHeuristic() {
+        if isPVE, let move = game.moveHavingBestHeuristic() {
             await setPlayer(at: move)
         }
         isAnimating = false

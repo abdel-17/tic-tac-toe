@@ -3,12 +3,10 @@ import SwiftUI
 /// A shape that draws a tic-tac-toe player in a square.
 struct Cell: Shape {
     /// The duration of a cell's animation.
-    static var animationDuration: Double { 0.5 }
+    static let animationDuration =  0.5
     
     /// The animation performed by a cell.
-    static var animation: Animation {
-        .easeOut(duration: animationDuration)
-    }
+    static let animation = Animation.easeOut(duration: animationDuration)
     
     /// The player at this cell.
     let player: TicTacToe.Player?
@@ -53,14 +51,12 @@ struct Cell: Shape {
     }
     
     func path(in rect: CGRect) -> Path {
-        // Draw nothing if the cell is empty.
-        guard let player = player else {
-            return Path()
-        }
-        // Add 20% padding.
-        let rect = rect.insetBy(dx: 0.2 * rect.width,
-                                dy: 0.2 * rect.height)
-        return Path { path in
+        Path { path in
+            // Draw nothing if the cell is empty.
+            guard let player = player else { return }
+            // Add 20% padding.
+            let rect = rect.insetBy(dx: 0.2 * rect.width,
+                                    dy: 0.2 * rect.height)
             switch player {
             case .x:
                 // Draw two diagonal lines.
