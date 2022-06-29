@@ -58,14 +58,14 @@ struct TicTacToe {
         turns == 0
     }
     
-    /// True iff this game has ended.
-    var hasEnded: Bool {
-        // Either the player won the game,
-        // or the board is filled entirely.
-        !matchingIndices.isEmpty || turns == 9
+    /// True iff this game has not ended yet.
+    var hasNotEnded: Bool {
+        // Either no player won the game, or
+        // the board is not completely filled.
+        matchingIndices.isEmpty && turns != 9
     }
     
-    /// Returns true iff the grid is empty at `index`.
+    /// Returns true iff no player played at `index`.
     func isEmpty(at index: Int) -> Bool {
         grid[index] == nil
     }
@@ -116,7 +116,7 @@ struct TicTacToe {
     mutating func play(at index: Int) {
         // The given position must be empty
         // and the game must still be ongoing.
-        precondition(isEmpty(at: index) && !hasEnded)
+        precondition(isEmpty(at: index) && hasNotEnded)
         grid[index] = currentPlayer
         // Match along all possible directions.
         for (i, j, k) in TicTacToe.pairsAdjacent(to: index) {
@@ -129,7 +129,7 @@ struct TicTacToe {
             }
         }
         turns += 1
-        if !hasEnded {
+        if hasNotEnded {
              // Continue playing.
              currentPlayer = currentPlayer.opponent
         }
@@ -179,7 +179,8 @@ extension TicTacToe {
                 // The only remaining possible values are (2, 1)
                 // and (1, 1). Being blocked from winning is given
                 // score 0 as it does not evaluate to a win or loss.
-                assert((1...2).contains(count.player) && count.opponent == 1)
+                assert((1...2).contains(count.player) &&
+                       count.opponent == 1)
                 return 0
             }
         }
@@ -191,7 +192,8 @@ extension TicTacToe {
     ///
     /// If the game ended, `nil` is returned.
     func moveHavingBestHeuristic() -> Int? {
-        grid.indices
+        guard hasNotEnded else { return nil }
+        return grid.indices
             // Filter out the occupied positions.
             .filter { index in
                 isEmpty(at: index)

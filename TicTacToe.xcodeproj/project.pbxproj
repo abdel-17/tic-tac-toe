@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9E6150172857E2FD0070DF00 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6150162857E2FD0070DF00 /* ViewModel.swift */; };
-		9E6150182857E2FD0070DF00 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E6150162857E2FD0070DF00 /* ViewModel.swift */; };
 		9E80686F285233E600E34E27 /* TicTacToe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80686E285233E600E34E27 /* TicTacToe.swift */; };
 		9E806870285233E600E34E27 /* TicTacToe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E80686E285233E600E34E27 /* TicTacToe.swift */; };
 		9E8068752852344300E34E27 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8068742852344300E34E27 /* Cell.swift */; };
@@ -26,7 +24,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		9E6150162857E2FD0070DF00 /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		9E80686E285233E600E34E27 /* TicTacToe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTacToe.swift; sourceTree = "<group>"; };
 		9E8068742852344300E34E27 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		9E806880285238EC00E34E27 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -75,7 +72,6 @@
 				9EB19202282B8FDB00319A79 /* TicTacToeApp.swift */,
 				9E806883285238F300E34E27 /* Assets.xcassets */,
 				9E806880285238EC00E34E27 /* ContentView.swift */,
-				9E6150162857E2FD0070DF00 /* ViewModel.swift */,
 				9EF0D3C5285516CB005E280F /* GridView.swift */,
 			);
 			path = Shared;
@@ -202,7 +198,6 @@
 				9E8068752852344300E34E27 /* Cell.swift in Sources */,
 				9EF0D3C6285516CB005E280F /* GridView.swift in Sources */,
 				9EB19212282B8FDC00319A79 /* TicTacToeApp.swift in Sources */,
-				9E6150172857E2FD0070DF00 /* ViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,7 +211,6 @@
 				9E8068762852344300E34E27 /* Cell.swift in Sources */,
 				9EF0D3C7285516CB005E280F /* GridView.swift in Sources */,
 				9EB19213282B8FDC00319A79 /* TicTacToeApp.swift in Sources */,
-				9E6150182857E2FD0070DF00 /* ViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +221,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -285,6 +280,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
