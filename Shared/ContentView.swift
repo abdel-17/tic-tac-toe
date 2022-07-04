@@ -32,9 +32,13 @@ struct ContentView: View {
                 let height = bounds.size.height
                 GridView(state: $state,
                          lineWidth: 0.02 * min(width, height))
+                .onChange(of: state.difficulty) { _ in
+                    state.willReset = true
+                }
                 .padding(0.1 * min(width, height))
                 .frame(width: width,
                        height: height)
+                
             }
             
             HStack {
