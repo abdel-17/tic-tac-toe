@@ -15,17 +15,10 @@ extension Task where Success == Never, Failure == Never {
 
 /// A 3x3 grid of evenly-spaced cells.
 struct GridView: View {
-    @Binding var game: TicTacToe
-    
-    @Binding var willReset: Bool
-    
-    let isPVE: Bool
+    @Binding var state: ContentView.ViewState
     
     /// The width of the drawing line.
     let lineWidth: Double
-    
-    /// True iff an animation is occuring.
-    @State private var isAnimating = true
     
     /// The completion percentage of the
     /// grid lines animation.
@@ -41,54 +34,57 @@ struct GridView: View {
             ForEach(0..<3) { row in
                 HStack(spacing: lineWidth) {
                     ForEach(0..<3) { column in
-                        button(at: 3 * row + column)
+                        button(at: TicTacToe.index(row: row, column: column))
                     }
                 }
             }
         }
-        .aspectRatio(1, contentMode: .fit)
         .background(GridLines(lineWidth: lineWidth,
                               animationCompletion: animationCompletion))
-        .onChange(of: willReset) { willReset in
+        .aspectRatio(contentMode: .fit)
+        .disabled(state.disableGrid)
+        .onChange(of: state.willReset) { willReset in
             if willReset {
                 Task {
                     await self.reset()
-                    self.willReset = false
+                    state.willReset = false
                 }
             }
         }
         .task {
             animationCompletion = 1
+            // Wait for the grid line animation to finish,
+            // then re-enable the grid.
             await Task.sleep(seconds: 1)
-            isAnimating.toggle()
+            state.disableGrid = false
         }
-        .disabled(isAnimating)
-    }
         
-    /// Returns the button at the given index.
+    }
+    
+    /// Returns the button positioned at the given index.
     private func button(at index: Int) -> some View {
         Button {
             Task {
-                guard game.hasNotEnded else {
+                guard state.game.hasNotEnded else {
                     await self.reset()
                     return
                 }
                 await play(at: index)
             }
         } label: {
-            Cell(player: game.grid[index],
-                 isMatching: game.isMatching(at: index),
+            Cell(player: state.game.grid[index],
                  lineWidth: lineWidth,
+                 isMatching: state.game.isMatching(at: index),
                  animationCompletion: cellAnimationCompletions[index])
         }
         .buttonStyle(.borderless)
-        .disabled(!game.isEmpty(at: index) && game.hasNotEnded)
+        .disabled(!state.game.isEmpty(at: index) && state.game.hasNotEnded)
     }
     
-    /// Sets the current-turn player at `index`,
-    /// and returns after the cell's animation completes.
+    /// Sets the current-turn player at `index` and
+    /// returns after the cell's animation completes.
     private func setPlayer(at index: Int) async {
-        game.play(at: index)
+        state.game.play(at: index)
         withAnimation(Cell.animation) {
             cellAnimationCompletions[index] = 1
         }
@@ -97,25 +93,26 @@ struct GridView: View {
     
     /// Plays the game at `index`.
     private func play(at index: Int) async {
-        isAnimating.toggle()
+        state.disableGrid = true
         await setPlayer(at: index)
-        if isPVE, let move = game.moveHavingBestHeuristic() {
+        state.disableGrid = false
+        if state.isPVE,
+           let move = state.game.bestMove(difficulty: state.difficulty) {
             await setPlayer(at: move)
         }
-        isAnimating.toggle()
     }
     
     /// Resets the grid.
     func reset() async {
         // Only reset when needed.
-        guard !game.isFirstTurn else { return }
-        isAnimating.toggle()
+        guard !state.game.isFirstTurn else { return }
+        state.disableGrid = true
         withAnimation(Cell.animation) {
             cellAnimationCompletions = Array(repeating: 0,
                                              count: 9)
         }
         await Task.sleep(seconds: Cell.animationDuration)
-        game = TicTacToe(startingPlayer: .x)
-        isAnimating.toggle()
+        state.game = TicTacToe(startingPlayer: .x)
+        state.disableGrid = false
     }
 }

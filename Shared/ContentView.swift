@@ -1,14 +1,25 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var game = TicTacToe(startingPlayer: .x)
+    struct ViewState {
+        /// The logic of the game.
+       var game = TicTacToe(startingPlayer: .x)
+        
+        /// A Boolean value to check whether the game
+        /// mode is player-vs-enemy or player-vs-player.
+        var isPVE = true
+        
+        /// The method used by the AI to choose its move.
+        var difficulty = TicTacToe.Difficulty.medium
+        
+        /// True iff the grid buttons are disabled.
+        var disableGrid = true
+        
+        /// True iff the grid will reset.
+        var willReset = false
+    }
     
-    /// A Boolean value to check whether the game
-    /// mode is player-vs-enemy or player-vs-player.
-    @State private var isPVE = true
-    
-    /// True iff the grid will reset.
-    @State private var willReset = false
+    @State private var state = ViewState()
     
     var body: some View {
         VStack {
@@ -16,68 +27,102 @@ struct ContentView: View {
                 .font(.title2)
                 .bold()
             
-            Spacer()
-            
-            GridView(game: $game,
-                     willReset: $willReset,
-                     isPVE: isPVE,
-                     lineWidth: 7.5)
-            .padding()
-            
-            Spacer()
+            GeometryReader { bounds in
+                let width = bounds.size.width
+                let height = bounds.size.height
+                GridView(state: $state,
+                         lineWidth: 0.02 * min(width, height))
+                .padding(0.1 * min(width, height))
+                .frame(width: width,
+                       height: height)
+            }
             
             HStack {
-                Button {
-                    isPVE.toggle()
-                    willReset.toggle()
-                } label: {
-                    Image(systemName: isPVE ? "person" : "person.2")
-                        .foregroundColor(.blue)
+                styledButton(systemName: state.isPVE ? "person" : "person.2") {
+                    state.isPVE.toggle()
+                    state.willReset = true
                 }
+                .foregroundColor(.blue)
                 
                 Spacer()
                 
-                Button {
-                    willReset.toggle()
-                } label: {
-                    Image(systemName: "arrow.counterclockwise")
-                        .foregroundColor(.red)
+                // Difficulty picker
+                Picker("Difficulty", selection: $state.difficulty) {
+                    ForEach(TicTacToe.Difficulty.allCases) { difficulty in
+                        Text(difficulty.rawValue.capitalized)
+                            .tag(difficulty)
+                    }
                 }
+                .pickerStyle(.segmented)
+                .labelsHidden()
+                .frame(width: 200)
+                .opacity(state.isPVE ? 1 : 0)
+                .animation(.default, value: state.isPVE)
+                
+                Spacer()
+                
+                // Reset button
+                styledButton(systemName: "arrow.counterclockwise") {
+                    state.willReset = true
+                }
+                .foregroundColor(.red)
             }
-            .buttonStyle(.plain)
-            .symbolVariant(.fill.circle)
-            .symbolRenderingMode(.multicolor)
-            .font(.title)
         }
         .padding()
+        #if os(macOS)
+        .frame(minWidth: 350,
+               minHeight: 400)
+        #endif
     }
     
     /// The up-to-date displayed message.
     private var displayedMessage: String {
-        if game.hasNotEnded {
+        if state.game.hasNotEnded {
+            // Indicate to the user that to wait
+            // until the grid is re-renabled.
+            guard !state.disableGrid else { return "..." }
             // If we are in pve mode, we don't need to check
             // if the current player is x because the text
             // is hidden while the opponent is playing.
-            return isPVE ? "Your turn!" : "Player \(game.currentPlayer)"
+            return state.isPVE ? "Your turn!" : "Player \(state.game.currentPlayer)"
         }
-        // Game has ended. Check for draws first.
-        guard let winner = game.winner else { return "Draw!" }
-        if isPVE {
+        // The game has ended. Check for draws first.
+        guard state.game.hasWinner else { return "Draw!" }
+        if state.isPVE {
             // The AI is always player o.
-            switch winner {
+            switch state.game.currentPlayer {
             case .x:
                 return "You won!"
             case .o:
                 return "You lost!"
             }
         }
-        return "Player \(winner) won!"
+        return "Player \(state.game.currentPlayer) won!"
+    }
+    
+    /// Returns a bordeless button whose label is a
+    /// circular filled image with a large scale.
+    ///
+    /// - Parameters:
+    ///   - systemName: The system name of the image.
+    ///   - action: The action performed by the button.
+    private func styledButton(systemName: String,
+                              action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .symbolVariant(.fill.circle)
+                .symbolRenderingMode(.multicolor)
+                .font(.title)
+        }
+        .buttonStyle(.borderless)
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .previewInterfaceOrientation(.portrait)
+            
     }
 }
 

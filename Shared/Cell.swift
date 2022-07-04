@@ -1,22 +1,21 @@
 import SwiftUI
 
-/// A shape that draws a tic-tac-toe player in a square.
+/// A shape that draws a tic-tac-toe player.
 struct Cell: Shape {
     /// The duration of a cell's animation.
-    static let animationDuration =  0.5
+    static let animationDuration = 0.5
     
-    /// The animation performed by a cell.
-    static let animation = Animation.easeOut(duration: animationDuration)
+    /// The animation used to draw the players.
+    static let animation = Animation.easeOut(duration: Cell.animationDuration)
     
     /// The player at this cell.
     let player: TicTacToe.Player?
     
-    /// A Boolean value to check if the player at this cell
-    /// is matching along any of the 4 directions.
-    let isMatching: Bool
-    
     /// The width of the drawing line.
     let lineWidth: Double
+    
+    /// True iff this cell is at a matching position.
+    let isMatching: Bool
     
     /// The animation completion percentage of this cell.
     var animationCompletion: Double
@@ -32,14 +31,12 @@ struct Cell: Shape {
             .stroke(style: StrokeStyle(lineWidth: lineWidth,
                                        lineCap: .round))
             .foregroundColor(foregroundColor)
-            .animation(Cell.animation, value: isMatching)
+            .animation(.default, value: isMatching)
     }
     
     /// The foreground color of this cell.
     private var foregroundColor: Color? {
-        if isMatching {
-            return .green
-        }
+        guard !isMatching else { return .green }
         switch player {
         case .x:
             return .red
@@ -54,7 +51,7 @@ struct Cell: Shape {
         Path { path in
             // Draw nothing if the cell is empty.
             guard let player = player else { return }
-            // Add 20% padding.
+            // Add 10% padding around each edge.
             let rect = rect.insetBy(dx: 0.2 * rect.width,
                                     dy: 0.2 * rect.height)
             switch player {
