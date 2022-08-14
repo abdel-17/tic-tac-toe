@@ -7,10 +7,6 @@ struct ContentView: View {
     /// The view model.
     @StateObject private var grid = GameGrid()
     
-    #if os(iOS)
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    #endif
-    
     var body: some View {
         GeometryReader { proxy in
             // 10% padding.
