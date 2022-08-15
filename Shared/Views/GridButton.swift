@@ -2,6 +2,8 @@ import SwiftUI
 
 /// A button in a tic-tac-toe grid.
 struct GridButton: View {
+    @AppStorage("difficulty") var difficulty = TicTacToe.Difficulty.medium
+    
     @EnvironmentObject var grid: GameGrid
     
     /// The row-major index of this button in the grid.
@@ -12,7 +14,14 @@ struct GridButton: View {
     
     var body: some View {
         Button {
-            Task { await grid.play(at: index) }
+            Task {
+                guard grid.game.hasNotEnded else {
+                    // Reset after the game ends.
+                    await grid.reset()
+                    return
+                }
+                await grid.play(at: index, difficulty: difficulty)
+            }
         } label: {
             PlayerView(player: cell.player,
                        lineWidth: lineWidth,
@@ -23,17 +32,18 @@ struct GridButton: View {
         // Animate the color transition to green.
         .animation(PlayerView.animation, value: cell.isMatching)
         // Prevent playing at occupied cells during the game.
-        .disabled(!cell.isEmpty || grid.gameHasEnded)
+        .disabled(!cell.isEmpty && grid.game.hasNotEnded)
     }
     
     /// The cell at the index of this button.
     private var cell: TicTacToe.Cell {
-        grid[index].cell
+        grid.game.cells[index]
     }
     
-    /// The animation progress of the cell.
+    /// The animation progress of the cell
+    /// at this button's index.
     private var animationProgress: Double {
-        grid[index].animationProgress
+        grid.cellsAnimationProgress[index]
     }
     
     /// The foreground color of this button.

@@ -29,10 +29,10 @@ struct SwitchGameModeButton: View {
 
 /// A picker for the difficulty level.
 struct DifficultyPicker: View {
-    @EnvironmentObject var grid: GameGrid
+    @AppStorage("difficulty") var difficulty = TicTacToe.Difficulty.medium
     
     var body: some View {
-        Picker(selection: $grid.difficulty) {
+        Picker(selection: $difficulty) {
             ForEach(TicTacToe.Difficulty.allCases) { difficulty in
                 Text(difficulty.rawValue.capitalized)
                     .tag(difficulty)
@@ -40,16 +40,15 @@ struct DifficultyPicker: View {
         } label: {
             Label("CPU Difficulty", systemImage: "speedometer")
         }
-        .pickerStyle(.menu)
     }
 }
 
 /// A picker for the app's appearance.
 struct AppearancePicker: View {
-    @Binding var selection: Appearance
+    @AppStorage("appearance") var appearance = Appearance.system
     
     var body: some View {
-        Picker(selection: $selection) {
+        Picker(selection: $appearance) {
             ForEach(Appearance.allCases) { appearance in
                 Text(appearance.rawValue.capitalized)
                     .id(appearance)
@@ -57,6 +56,5 @@ struct AppearancePicker: View {
         } label: {
             Label("Appearance", systemImage: "sun.max")
         }
-        .pickerStyle(.menu)
     }
 }

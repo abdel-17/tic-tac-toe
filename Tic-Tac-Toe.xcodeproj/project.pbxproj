@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		9E10AC3928A4654B00F48BFC /* GameGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E10AC3828A4654B00F48BFC /* GameGrid.swift */; };
 		9E10AC3A28A4654B00F48BFC /* GameGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E10AC3828A4654B00F48BFC /* GameGrid.swift */; };
-		9E10AC3C28A4965B00F48BFC /* ToolbarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E10AC3B28A4965B00F48BFC /* ToolbarItems.swift */; };
-		9E10AC3D28A4965B00F48BFC /* ToolbarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E10AC3B28A4965B00F48BFC /* ToolbarItems.swift */; };
+		9E10AC3C28A4965B00F48BFC /* Controls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E10AC3B28A4965B00F48BFC /* Controls.swift */; };
+		9E10AC3D28A4965B00F48BFC /* Controls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E10AC3B28A4965B00F48BFC /* Controls.swift */; };
 		9E10AC4028A6219600F48BFC /* GridButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E10AC3F28A6219600F48BFC /* GridButton.swift */; };
 		9E10AC4128A6219600F48BFC /* GridButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E10AC3F28A6219600F48BFC /* GridButton.swift */; };
 		9E10AC4628A7571C00F48BFC /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E10AC4528A7571C00F48BFC /* Appearance.swift */; };
@@ -35,7 +35,7 @@
 
 /* Begin PBXFileReference section */
 		9E10AC3828A4654B00F48BFC /* GameGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGrid.swift; sourceTree = "<group>"; };
-		9E10AC3B28A4965B00F48BFC /* ToolbarItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarItems.swift; sourceTree = "<group>"; };
+		9E10AC3B28A4965B00F48BFC /* Controls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controls.swift; sourceTree = "<group>"; };
 		9E10AC3F28A6219600F48BFC /* GridButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridButton.swift; sourceTree = "<group>"; };
 		9E10AC4528A7571C00F48BFC /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
 		9E47685D289E0D3A00E72E5D /* CollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionExtension.swift; sourceTree = "<group>"; };
@@ -93,7 +93,7 @@
 				9EF0D3C5285516CB005E280F /* GridView.swift */,
 				9E8068742852344300E34E27 /* PlayerView.swift */,
 				9EF0D3C2285516BB005E280F /* GridLines.swift */,
-				9E10AC3B28A4965B00F48BFC /* ToolbarItems.swift */,
+				9E10AC3B28A4965B00F48BFC /* Controls.swift */,
 				9E10AC3F28A6219600F48BFC /* GridButton.swift */,
 			);
 			path = Views;
@@ -239,7 +239,7 @@
 				9EF0D3C3285516BB005E280F /* GridLines.swift in Sources */,
 				9E10AC3928A4654B00F48BFC /* GameGrid.swift in Sources */,
 				9E47685E289E0D3A00E72E5D /* CollectionExtension.swift in Sources */,
-				9E10AC3C28A4965B00F48BFC /* ToolbarItems.swift in Sources */,
+				9E10AC3C28A4965B00F48BFC /* Controls.swift in Sources */,
 				9E80686F285233E600E34E27 /* TicTacToe.swift in Sources */,
 				9E806881285238EC00E34E27 /* ContentView.swift in Sources */,
 				9E10AC4028A6219600F48BFC /* GridButton.swift in Sources */,
@@ -257,7 +257,7 @@
 				9EF0D3C4285516BB005E280F /* GridLines.swift in Sources */,
 				9E10AC3A28A4654B00F48BFC /* GameGrid.swift in Sources */,
 				9E47685F289E0D3A00E72E5D /* CollectionExtension.swift in Sources */,
-				9E10AC3D28A4965B00F48BFC /* ToolbarItems.swift in Sources */,
+				9E10AC3D28A4965B00F48BFC /* Controls.swift in Sources */,
 				9E806870285233E600E34E27 /* TicTacToe.swift in Sources */,
 				9E806882285238EC00E34E27 /* ContentView.swift in Sources */,
 				9E10AC4128A6219600F48BFC /* GridButton.swift in Sources */,

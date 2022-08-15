@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    /// The appearance mode of this app.
-    @AppStorage("appearance") private var appearance = Appearance.system
+    @AppStorage("appearance") var appearance = Appearance.system
     
     /// The view model.
     @StateObject private var grid = GameGrid()
@@ -15,35 +14,29 @@ struct ContentView: View {
             .frame(width: proxy.size.width, height: proxy.size.height)
         }
         .navigationTitle(grid.title)
-        #if os(iOS)
-        .navigationBarTitleDisplayMode(.inline)
-        #endif
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
+            ToolbarItemGroup(placement: .primaryAction) {
                 RestartButton()
+                #if os(macOS)
+                SwitchGameModeButton()
+                #endif
             }
             #if os(iOS)
             ToolbarItem(placement: .navigationBarLeading) {
                 Menu {
-                    extraToolbarControls
+                    SwitchGameModeButton()
+                    DifficultyPicker()
+                        .pickerStyle(.menu)
+                    AppearancePicker()
+                        .pickerStyle(.menu)
                 } label: {
                     Label("settings", systemImage: "gear")
                 }
-            }
-            #elseif os(macOS)
-            ToolbarItemGroup {
-                extraToolbarControls
             }
             #endif
         }
         .preferredColorScheme(appearance.preferredColorScheme)
         .environmentObject(grid)
-    }
-    
-    @ViewBuilder private var extraToolbarControls: some View {
-        SwitchGameModeButton()
-        DifficultyPicker()
-        AppearancePicker(selection: $appearance)
     }
 }
 

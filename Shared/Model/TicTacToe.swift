@@ -50,6 +50,12 @@ struct TicTacToe {
 }
 
 extension TicTacToe {
+    /// True iff this game has not ended yet.
+    var hasNotEnded: Bool {
+        // Neither player has won and it is not a draw.
+        !playerHasWon && cells.anySatisfy(\.isEmpty)
+    }
+    
     /// Returns the row-major indices of the triplets
     /// adjacent to the given position.
     private func tripletsAdjacent(to index: Int) -> [[Int]] {
@@ -103,7 +109,7 @@ extension TicTacToe {
                 cells[index].isMatching = true
             }
         }
-        if !playerHasWon {
+        if hasNotEnded {
             currentPlayer.switchToOpponent()
         }
     }
