@@ -14,6 +14,9 @@ struct ContentView: View {
             .frame(width: proxy.size.width, height: proxy.size.height)
         }
         .navigationTitle(grid.title)
+        #if os(iOS)
+        .navigationBarTitleDisplayMode(.inline)
+        #endif
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
                 RestartButton()
@@ -37,6 +40,19 @@ struct ContentView: View {
         }
         .preferredColorScheme(appearance.preferredColorScheme)
         .environmentObject(grid)
+        #if os(iOS)
+        .modifier(NavigationStack())
+        #endif
+    }
+}
+
+/// A modifier that wraps a view in a navigation stack.
+struct NavigationStack: ViewModifier {
+    func body(content: Content) -> some View {
+        NavigationView {
+            content
+        }
+        .navigationViewStyle(.stack)
     }
 }
 

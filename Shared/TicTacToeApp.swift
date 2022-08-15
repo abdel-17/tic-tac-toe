@@ -11,14 +11,8 @@ struct TicTacToeApp: App {
     
     var body: some Scene {
         WindowGroup {
-            #if os(iOS)
-            NavigationView {
-                ContentView()
-                    .navigationBarTitleDisplayMode(.inline)
-            }
-            .navigationViewStyle(.stack)
-            #else
             ContentView()
+            #if os(macOS)
                 .frame(minWidth: 400, idealWidth: 400,
                        minHeight: 400, idealHeight: 400)
             #endif
