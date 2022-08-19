@@ -39,8 +39,8 @@ struct TicTacToe {
     /// The player of the current turn.
     private(set) var currentPlayer: Player
     
-    /// True iff the current player has won.
-    private(set) var playerHasWon = false
+    /// The winner of this game.
+    private(set) var winner: Player? = nil
     
     /// Creates a tic-tac-toe game,
     /// starting with the given player.
@@ -50,10 +50,10 @@ struct TicTacToe {
 }
 
 extension TicTacToe {
-    /// True iff this game has not ended yet.
+    /// True iff neither player has won and
+    /// the game has not ended in a draw.
     var hasNotEnded: Bool {
-        // Neither player has won and it is not a draw.
-        !playerHasWon && cells.anySatisfy(\.isEmpty)
+        winner == nil && cells.anySatisfy(\.isEmpty)
     }
     
     /// Returns the row-major indices of the triplets
@@ -90,28 +90,20 @@ extension TicTacToe {
         return triplet.allEqual(by: { cells[$0].player })
     }
     
-    /// Returns true iff neither player has won and
-    /// the grid is empty at the given index.
-    private func canPlay(at index: Int) -> Bool {
-        !playerHasWon && cells[index].isEmpty
-    }
-    
-    /// Plays at the given index, then, if neither
-    /// player won, switches to the next player.
+    /// Plays at the given index, then switches
+    /// control to the next player.
     mutating func play(at index: Int) {
-        assert(canPlay(at: index))
+        assert(winner == nil && cells[index].isEmpty)
         cells[index].player = currentPlayer
         // Check for matches adjacent to the given index.
         for triplet in tripletsAdjacent(to: index) where isMatching(triplet: triplet) {
             // Found a match.
-            playerHasWon = true
+            winner = currentPlayer
             for index in triplet {
                 cells[index].isMatching = true
             }
         }
-        if hasNotEnded {
-            currentPlayer.switchToOpponent()
-        }
+        currentPlayer.switchToOpponent()
     }
 }
 
@@ -120,7 +112,7 @@ extension TicTacToe {
     /// Returns a score that approximates how significant
     /// playing at the given index is to winning.
     private func heuristic(index: Int) -> Int {
-        assert(canPlay(at: index))
+        assert(cells[index].isEmpty)
         // Assign each adjacent triplet a score according
         // to the number of occurances of each player,
         // and add them all up.
@@ -228,7 +220,7 @@ extension TicTacToe {
     ///
     /// If the game has ended, returns `nil`.
     mutating func bestMove(difficulty: Difficulty) -> Int? {
-        guard !playerHasWon else { return nil }
+        guard winner == nil else { return nil }
         switch difficulty {
         case .easy:
             return emptyIndices.randomElement()

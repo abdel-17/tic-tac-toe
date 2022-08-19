@@ -46,6 +46,7 @@ struct ContentView: View {
     }
 }
 
+#if os(iOS)
 /// A modifier that wraps a view in a navigation stack.
 struct NavigationStack: ViewModifier {
     func body(content: Content) -> some View {
@@ -55,6 +56,7 @@ struct NavigationStack: ViewModifier {
         .navigationViewStyle(.stack)
     }
 }
+#endif
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
