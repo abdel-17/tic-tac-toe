@@ -1,59 +1,53 @@
 import SwiftUI
 
 /// A button in a tic-tac-toe grid.
-struct GridButton: View {
-    @AppStorage("difficulty") var difficulty = TicTacToe.Difficulty.medium
+struct GridButton : View {
+    /// The completion percentage of the player's
+    /// drawing animation.
+    @State private var animationCompletion = 0.0
     
-    @EnvironmentObject var grid: GameGrid
+    /// The cell this button is positioned at in the grid.
+    let cell: TicTacToe.Cell
     
-    /// The row-major index of this button in the grid.
-    let index: Int
-    
-    /// The width of the drawing line.
+    /// The stroke width of the drawing line.
     let lineWidth: Double
     
+    /// A publisher for receiving reset events.
+    let resetPublisher: EventPublisher
+    
+    /// The action performed when this button is clicked.
+    let onClick: () -> Void
+    
     var body: some View {
-        Button {
-            Task {
-                guard grid.game.hasNotEnded else {
-                    // Reset after the game ends.
-                    await grid.reset()
-                    return
-                }
-                await grid.play(at: index, difficulty: difficulty)
-            }
-        } label: {
+        Button(action: onClick) {
             PlayerView(player: cell.player,
                        lineWidth: lineWidth,
-                       animationProgress: animationProgress)
+                       animationCompletion: animationCompletion)
         }
         .buttonStyle(.borderless)
         .foregroundColor(foregroundColor)
         // Animate the color transition to green.
         .animation(PlayerView.animation, value: cell.isMatching)
-        // Prevent playing at occupied cells during the game.
-        .disabled(!cell.isEmpty && grid.game.hasNotEnded)
+        // Animate the drawing of players.
+        .animation(PlayerView.animation, value: animationCompletion)
+        .onChange(of: cell.player) { player in
+            // Animate drawing the player.
+            if player != nil { animationCompletion = 1 }
+        }
+        .onReceive(resetPublisher) {
+            animationCompletion = 0
+        }
     }
     
-    /// The cell at the index of this button.
-    private var cell: TicTacToe.Cell {
-        grid.game.cells[index]
-    }
-    
-    /// The animation progress of the cell
-    /// at this button's index.
-    private var animationProgress: Double {
-        grid.cellsAnimationProgress[index]
-    }
-    
-    /// The foreground color of this button.
     private var foregroundColor: Color? {
-        // Mark matching cells.
+        // Mark matching cells with a green color.
         guard !cell.isMatching else { return .green }
         switch cell.player {
         case .x:
+            // X is given a red color. Fitting for a cross, isn't it?
             return .red
         case .o:
+            // Blue is complementary to red.
             return .blue
         case nil:
             return nil

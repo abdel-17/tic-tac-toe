@@ -30,7 +30,7 @@ extension Collection {
         for element in self where predicate(element) {
             return true
         }
-        // Not a single element satisfied `predicate`.
+        // Not a single element satisfies `predicate`.
         return false
     }
     

@@ -1,64 +1,60 @@
 import SwiftUI
+import Combine
 
-struct ContentView: View {
-    @AppStorage("appearance") var appearance = Appearance.system
+typealias EventPublisher = PassthroughSubject<Void, Never>
+
+struct ContentView : View {
+    /// The appearance of the app.
+    ///
+    /// The user can choose to override the
+    /// system look, forcing dark or light mode.
+    @AppStorage("appearance") private var appearance = Appearance.system
     
-    /// The view model.
-    @StateObject private var grid = GameGrid()
+    /// The text presented by the navigation bar on iOS
+    /// and the window on macOS.
+    @State private var navigationTitle = ""
+    
+    /// A publisher for sending reset events.
+    private let resetPublisher = EventPublisher()
     
     var body: some View {
-        GeometryReader { proxy in
-            // 10% padding.
-            GridView(length: 0.8 * min(proxy.size.width, proxy.size.height))
-            // Center the grid.
-            .frame(width: proxy.size.width, height: proxy.size.height)
-        }
-        .navigationTitle(grid.title)
-        #if os(iOS)
-        .navigationBarTitleDisplayMode(.inline)
-        #endif
-        .toolbar {
-            ToolbarItemGroup(placement: .primaryAction) {
-                RestartButton()
-                #if os(macOS)
-                SwitchGameModeButton()
-                #endif
+        NavigationView {
+            GeometryReader { geometry in
+                let width = geometry.size.width, height = geometry.size.height
+                TicTacToeGrid(navigationTitle: $navigationTitle,
+                              resetPublisher: resetPublisher,
+                              // Add 5% padding.
+                              length: 0.9 * min(width, height))
+                // Center the grid.
+                .frame(width: width, height: height)
             }
+            .navigationTitle(navigationTitle)
             #if os(iOS)
-            ToolbarItem(placement: .navigationBarLeading) {
-                Menu {
-                    SwitchGameModeButton()
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
+            .toolbar(id: "actions") {
+                ToolbarItem(id: "restart", placement: .primaryAction) {
+                    RestartButton(resetPublisher: resetPublisher)
+                }
+                ToolbarItem(id: "mode") {
+                    SwitchGameModeButton(resetPublisher: resetPublisher)
+                }
+                ToolbarItem(id: "difficulty") {
                     DifficultyPicker()
                         .pickerStyle(.menu)
+                }
+                ToolbarItem(id: "appearance") {
                     AppearancePicker()
                         .pickerStyle(.menu)
-                } label: {
-                    Label("settings", systemImage: "gear")
                 }
             }
-            #endif
-        }
-        .preferredColorScheme(appearance.preferredColorScheme)
-        .environmentObject(grid)
-        #if os(iOS)
-        .modifier(NavigationStack())
-        #endif
-    }
-}
-
-#if os(iOS)
-/// A modifier that wraps a view in a navigation stack.
-struct NavigationStack: ViewModifier {
-    func body(content: Content) -> some View {
-        NavigationView {
-            content
+            .preferredColorScheme(appearance.preferredColorScheme)
         }
         .navigationViewStyle(.stack)
     }
 }
-#endif
 
-struct ContentView_Previews: PreviewProvider {
+struct ContentViewPreviews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }

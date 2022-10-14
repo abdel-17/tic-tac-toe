@@ -1,12 +1,12 @@
 import SwiftUI
 
 /// A button for resetting the grid.
-struct RestartButton: View {
-    @EnvironmentObject var grid: GameGrid
+struct RestartButton : View {
+    var resetPublisher: EventPublisher
     
     var body: some View {
         Button {
-            Task { await grid.reset() }
+            resetPublisher.send()
         } label: {
             Label("Restart", systemImage: "arrow.counterclockwise")
         }
@@ -14,21 +14,24 @@ struct RestartButton: View {
 }
 
 /// A button for switching the game mode.
-struct SwitchGameModeButton: View {
-    @EnvironmentObject var grid: GameGrid
+struct SwitchGameModeButton : View {
+    @AppStorage("isPVE") private var isPVE = true
+    
+    var resetPublisher: EventPublisher
     
     var body: some View {
         Button {
-            Task { await grid.reset(switchingGameMode: true) }
+            isPVE.toggle()
+            resetPublisher.send()
         } label: {
-            Label(grid.isPVP ? "2 Players" : "1 Player",
-                  systemImage: grid.isPVP ? "person.2" : "person")
+            Label(isPVE ? "1 Player" : "2 Players",
+                  systemImage: isPVE ? "person" : "person.2")
         }
     }
 }
 
 /// A picker for the difficulty level.
-struct DifficultyPicker: View {
+struct DifficultyPicker : View {
     @AppStorage("difficulty") var difficulty = TicTacToe.Difficulty.medium
     
     var body: some View {
@@ -44,7 +47,7 @@ struct DifficultyPicker: View {
 }
 
 /// A picker for the app's appearance.
-struct AppearancePicker: View {
+struct AppearancePicker : View {
     @AppStorage("appearance") var appearance = Appearance.system
     
     var body: some View {

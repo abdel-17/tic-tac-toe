@@ -1,34 +1,35 @@
 import SwiftUI
 
-/// A shape that draws a tic-tac-toe player.
-struct PlayerView: Shape {
-    /// The duration of the animation used by this type.
-    static let animationDuration = 0.5
+struct PlayerView : Shape {
+    /// The duration of the player's drawing
+    /// animation in nanoseconds.
+    static let animationDurationNano: UInt64 = 500_000_000
     
     /// The animation used to draw players.
-    static let animation = Animation.easeOut(duration: PlayerView.animationDuration)
+    static let animation = Animation.easeOut(duration: 0.5)
     
-    /// The cell this view presents.
+    /// The player drawn by this view, if any.
     let player: TicTacToe.Player?
     
-    /// The width of the drawing line.
+    /// The stroke width of the drawing line.
     let lineWidth: Double
     
-    /// The completion percentage of the animation.
-    var animationProgress: Double
+    /// The completion percentage of the
+    /// player's drawing animation.
+    var animationCompletion: Double
     
     var animatableData: Double {
-        get { animationProgress }
+        get { animationCompletion }
         
-        set { animationProgress = newValue }
+        set { animationCompletion = newValue }
     }
     
     func path(in rect: CGRect) -> Path {
         Path { path in
             // Draw nothing if the cell is empty.
-            guard let player = player else { return }
-            // 20% padding
-            let rect = rect.insetBy(dx: 0.2 * rect.width, dy: 0.2 * rect.height)
+            guard let player else { return }
+            // Add 10% padding.
+            let rect = rect.insetBy(dx: 0.1 * rect.width, dy: 0.1 * rect.height)
             switch player {
             case .x:
                 // Draw a diagonal from the upper left corner.
@@ -40,13 +41,14 @@ struct PlayerView: Shape {
             case .o:
                 // Draw a centered arc.
                 path.addArc(center: CGPoint(x: rect.midX, y: rect.midY),
-                            radius: rect.width / 2,
+                            radius: min(rect.width, rect.height) / 2,
                             startAngle: .degrees(0),
                             endAngle: .degrees(360),
                             clockwise: false)
             }
         }
-        .trimmedPath(from: 0, to: animationProgress)
+        // Draw a portion of the path according to the animation.
+        .trimmedPath(from: 0, to: animationCompletion)
         .strokedPath(StrokeStyle(lineWidth: lineWidth, lineCap: .round))
     }
 }
