@@ -41,9 +41,12 @@ struct ContentView : View {
             ToolbarItem(id: "difficulty") {
                 DifficultyPicker()
             }
+            // The appearance is changed from a command menu on macOS.
+            #if os(iOS)
             ToolbarItem(id: "appearance") {
                 AppearancePicker()
             }
+            #endif
         }
         .preferredColorScheme(appearance.preferredColorScheme)
         #if os(iOS)
