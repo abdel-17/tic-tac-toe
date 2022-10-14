@@ -133,11 +133,11 @@ struct TicTacToeGrid : View {
                 // Wait for the cells to finish their reset animation.
                 isDisabled = true
                 try? await Task.sleep(nanoseconds: PlayerView.animationDurationNano)
+                isDisabled = false
             }
             // In pve, the user always starts playing.
             game = TicTacToe(startingPlayer: isPVE ? .x : game.player)
             updateNavigationTitle()
-            isDisabled = false
         }
     }
 }
