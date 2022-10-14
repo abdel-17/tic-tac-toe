@@ -56,7 +56,7 @@ struct TicTacToeGrid : View {
                               animationPercentage: animationCompletion))
         .frame(width: length, height: length)
         .disabled(isDisabled)
-        .onReceive(resetPublisher, perform: onRecieveResetEvent)
+        .onReceive(resetPublisher, perform: onReceiveResetEvent)
         .task {
             // Draw the grid lines with animation when it first appears.
             guard animationCompletion == 0 else { return }
@@ -127,7 +127,7 @@ struct TicTacToeGrid : View {
     }
     
     /// The action performed on receiving a reset event.
-    private func onRecieveResetEvent() {
+    private func onReceiveResetEvent() {
         Task {
             if game.turns != 0 {
                 // Wait for the cells to finish their reset animation.
