@@ -132,6 +132,7 @@ extension TicTacToe {
             }
         }
         player.switchToOpponent()
+        turns += 1
     }
 }
 
@@ -252,8 +253,8 @@ extension TicTacToe {
         var id: Self { self }
     }
     
-    /// Returns the index chosen by the AI,
-    /// given its difficulty level.
+    /// Returns the index chosen by the AI
+    /// to play at, given its difficulty level.
     ///
     /// If the game has ended, returns `nil`.
     mutating func playAI(difficulty: Difficulty) -> Int? {
