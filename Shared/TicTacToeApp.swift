@@ -14,7 +14,7 @@ struct TicTacToeApp: App {
             CommandMenu("Appearance") {
                 AppearancePicker()
                     .pickerStyle(.inline)
-                    // Hide the label.
+                    // Hide the label. The command menu's label is sufficient.
                     .labelStyle(.iconOnly)
             }
         }
