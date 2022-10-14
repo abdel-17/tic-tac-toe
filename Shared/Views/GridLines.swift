@@ -62,3 +62,20 @@ struct GridLines : Shape {
         .strokedPath(StrokeStyle(lineWidth: lineWidth))
     }
 }
+
+struct GridLinesPreviews: PreviewProvider {
+    static var previews: some View {
+        let lineWidth = 15.0
+        VStack(spacing: lineWidth) {
+            ForEach(0..<3) { row in
+                HStack(spacing: lineWidth) {
+                    ForEach(0..<3) { column in
+                        Color.blue
+                    }
+                }
+            }
+        }
+        .background(GridLines(lineWidth: lineWidth, animationPercentage: 1.0))
+        .scaledToFit()
+    }
+}
