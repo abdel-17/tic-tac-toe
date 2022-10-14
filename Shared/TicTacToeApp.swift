@@ -2,13 +2,6 @@ import SwiftUI
 
 @main
 struct TicTacToeApp: App {
-    /// A value to toggle between the system look,
-    /// light mode, and dark mode.
-    @AppStorage("appearance") var appearance = Appearance.system
-    
-    /// The difficulty of the game's AI.
-    @AppStorage("difficulty") var difficulty = TicTacToe.Difficulty.medium
-    
     var body: some Scene {
         WindowGroup {
             ContentView()
