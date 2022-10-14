@@ -10,14 +10,7 @@ struct TicTacToeApp: App {
                        minHeight: 400, idealHeight: 400)
             #endif
         }
-        #if os(macOS)
         .commands {
-            CommandMenu("CPU Difficulty") {
-                DifficultyPicker()
-                    .pickerStyle(.inline)
-                    // Hide the label.
-                    .labelStyle(.iconOnly)
-            }
             CommandMenu("Appearance") {
                 AppearancePicker()
                     .pickerStyle(.inline)
@@ -25,6 +18,5 @@ struct TicTacToeApp: App {
                     .labelStyle(.iconOnly)
             }
         }
-        #endif
     }
 }
