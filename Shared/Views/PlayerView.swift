@@ -28,8 +28,8 @@ struct PlayerView : Shape {
         Path { path in
             // Draw nothing if the cell is empty.
             guard let player else { return }
-            // Add 10% padding.
-            let rect = rect.insetBy(dx: 0.1 * rect.width, dy: 0.1 * rect.height)
+            // Add 15% padding.
+            let rect = rect.insetBy(dx: 0.15 * rect.width, dy: 0.15 * rect.height)
             switch player {
             case .x:
                 // Draw a diagonal from the upper left corner.
