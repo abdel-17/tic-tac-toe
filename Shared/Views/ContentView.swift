@@ -18,41 +18,55 @@ struct ContentView : View {
     private let resetPublisher = EventPublisher()
     
     var body: some View {
+        GeometryReader { geometry in
+            let width = geometry.size.width, height = geometry.size.height
+            TicTacToeGrid(navigationTitle: $navigationTitle,
+                          resetPublisher: resetPublisher,
+                          // Add 5% padding.
+                          length: 0.9 * min(width, height))
+            // Center the grid.
+            .frame(width: width, height: height)
+        }
+        .navigationTitle(navigationTitle)
+        #if os(iOS)
+        .navigationBarTitleDisplayMode(.inline)
+        #endif
+        .toolbar(id: "actions") {
+            ToolbarItem(id: "restart", placement: .primaryAction) {
+                RestartButton(resetPublisher: resetPublisher)
+            }
+            ToolbarItem(id: "mode") {
+                SwitchGameModeButton(resetPublisher: resetPublisher)
+            }
+            ToolbarItem(id: "difficulty") {
+                DifficultyPicker()
+                    .pickerStyle(.menu)
+            }
+            ToolbarItem(id: "appearance") {
+                AppearancePicker()
+                    .pickerStyle(.menu)
+            }
+        }
+        .preferredColorScheme(appearance.preferredColorScheme)
+        #if os(iOS)
+        .wrapInNavigationStack()
+        #endif
+    }
+}
+
+// `NavigationViewStyle.stack` is not available on macOS
+// and `NavigationStack` requires iOS 16+ and macOS 13+.
+// Can we have some backwards compatibility, Apple?
+#if os(iOS)
+extension View {
+    func wrapInNavigationStack() -> some View {
         NavigationView {
-            GeometryReader { geometry in
-                let width = geometry.size.width, height = geometry.size.height
-                TicTacToeGrid(navigationTitle: $navigationTitle,
-                              resetPublisher: resetPublisher,
-                              // Add 5% padding.
-                              length: 0.9 * min(width, height))
-                // Center the grid.
-                .frame(width: width, height: height)
-            }
-            .navigationTitle(navigationTitle)
-            #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
-            #endif
-            .toolbar(id: "actions") {
-                ToolbarItem(id: "restart", placement: .primaryAction) {
-                    RestartButton(resetPublisher: resetPublisher)
-                }
-                ToolbarItem(id: "mode") {
-                    SwitchGameModeButton(resetPublisher: resetPublisher)
-                }
-                ToolbarItem(id: "difficulty") {
-                    DifficultyPicker()
-                        .pickerStyle(.menu)
-                }
-                ToolbarItem(id: "appearance") {
-                    AppearancePicker()
-                        .pickerStyle(.menu)
-                }
-            }
-            .preferredColorScheme(appearance.preferredColorScheme)
+            self
         }
         .navigationViewStyle(.stack)
     }
 }
+#endif
 
 struct ContentViewPreviews: PreviewProvider {
     static var previews: some View {
