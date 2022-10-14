@@ -40,11 +40,9 @@ struct ContentView : View {
             }
             ToolbarItem(id: "difficulty") {
                 DifficultyPicker()
-                    .pickerStyle(.menu)
             }
             ToolbarItem(id: "appearance") {
                 AppearancePicker()
-                    .pickerStyle(.menu)
             }
         }
         .preferredColorScheme(appearance.preferredColorScheme)
