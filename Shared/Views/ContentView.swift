@@ -39,14 +39,11 @@ struct ContentView : View {
                 SwitchGameModeButton(resetPublisher: resetPublisher)
             }
             ToolbarItem(id: "difficulty") {
-                DifficultyPicker()
+                DifficultyMenu()
             }
-            // The appearance is changed from a command menu on macOS.
-            #if os(iOS)
             ToolbarItem(id: "appearance") {
-                AppearancePicker()
+                AppearanceMenu()
             }
-            #endif
         }
         .preferredColorScheme(appearance.preferredColorScheme)
         #if os(iOS)

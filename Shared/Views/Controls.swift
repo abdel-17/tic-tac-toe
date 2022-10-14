@@ -30,32 +30,38 @@ struct SwitchGameModeButton : View {
     }
 }
 
-/// A picker for the difficulty level.
-struct DifficultyPicker : View {
-    @AppStorage("difficulty") var difficulty = TicTacToe.Difficulty.medium
+/// A menu for changing the AI difficulty level.
+struct DifficultyMenu : View {
+    @AppStorage("difficulty") private var difficulty = TicTacToe.Difficulty.medium
     
     var body: some View {
-        Picker(selection: $difficulty) {
-            ForEach(TicTacToe.Difficulty.allCases) { difficulty in
-                Text(difficulty.rawValue.capitalized)
-                    .tag(difficulty)
+        Menu {
+            Picker("Difficulty", selection: $difficulty) {
+                ForEach(TicTacToe.Difficulty.allCases) { difficulty in
+                    Text(difficulty.rawValue.capitalized)
+                        .tag(difficulty)
+                }
             }
+            .pickerStyle(.inline)
         } label: {
-            Label("CPU Difficulty", systemImage: "speedometer")
+            Label("Difficulty", systemImage: "speedometer")
         }
     }
 }
 
-/// A picker for the app's appearance.
-struct AppearancePicker : View {
-    @AppStorage("appearance") var appearance = Appearance.system
+/// A menu for changing the app's appearance.
+struct AppearanceMenu : View {
+    @AppStorage("appearance") private var appearance = Appearance.system
     
     var body: some View {
-        Picker(selection: $appearance) {
-            ForEach(Appearance.allCases) { appearance in
-                Text(appearance.rawValue.capitalized)
-                    .id(appearance)
+        Menu {
+            Picker("Appearance", selection: $appearance) {
+                ForEach(Appearance.allCases) { appearance in
+                    Text(appearance.rawValue.capitalized)
+                        .id(appearance)
+                }
             }
+            .pickerStyle(.inline)
         } label: {
             Label("Appearance", systemImage: "sun.max")
         }
