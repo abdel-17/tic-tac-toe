@@ -1,11 +1,13 @@
-# Preview
+# Screenshots
 
-## Light Mode
-<img width="512" alt="Screen Shot 2022-08-14 at 5 58 55 AM" src="https://user-images.githubusercontent.com/88583085/184522016-636cdcaf-3e9b-4d37-8d86-d2df32d6a722.png">
+### macOS 
+<img width=500 src="./Previews/macOS Light.png">
+<img width=500 src="./Previews/macOS Dark.png">
 
-## Dark Mode
-<img width="512" alt="Screen Shot 2022-08-14 at 5 58 51 AM" src="https://user-images.githubusercontent.com/88583085/184522043-cccd147f-911a-48d1-a727-38814957e36a.png">
+### iOS
+<img width=300 src="./Previews/iOS Light.png" align=left>
+<img width=300 src="./Previews/iOS Dark.png" align=left>
+<img width=300 src="./Previews/Options Menu.png">
 
-## Video
-https://user-images.githubusercontent.com/88583085/184522102-c8c86e22-bca8-402a-a5d9-18fca0a49b9b.mp4
-
+# Video Preview
+https://user-images.githubusercontent.com/88583085/203419768-6726d02c-e707-48a0-a48c-31bd5d1a9bea.mp4
