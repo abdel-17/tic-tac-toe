@@ -38,7 +38,6 @@
 		9E94BFCC292D683F0034DA79 /* Options Menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Options Menu.png"; sourceTree = "<group>"; };
 		9E94BFCD292D683F0034DA79 /* iOS Dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS Dark.png"; sourceTree = "<group>"; };
 		9E94BFCE292D683F0034DA79 /* iOS Light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iOS Light.png"; sourceTree = "<group>"; };
-		9E94BFD2292D68580034DA79 /* Preview.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Preview.mp4; sourceTree = "<group>"; };
 		9EB19202282B8FDB00319A79 /* TicTacToeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeApp.swift; sourceTree = "<group>"; };
 		9EB19211282B8FDC00319A79 /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		9ED42CE328F8E40F002BB0D4 /* TicTacToe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTacToe.swift; sourceTree = "<group>"; };
@@ -63,7 +62,6 @@
 			children = (
 				9E94BFCD292D683F0034DA79 /* iOS Dark.png */,
 				9E94BFCE292D683F0034DA79 /* iOS Light.png */,
-				9E94BFD2292D68580034DA79 /* Preview.mp4 */,
 				9E94BFCC292D683F0034DA79 /* Options Menu.png */,
 				9E94BFCA292D656E0034DA79 /* macOS Dark.png */,
 				9E94BFC8292D655B0034DA79 /* macOS Light.png */,
