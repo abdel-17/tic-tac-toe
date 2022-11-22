@@ -6,7 +6,8 @@ struct TicTacToeApp: App {
         WindowGroup {
             ContentView()
             #if os(macOS)
-                .frame(minWidth: 350, minHeight: 350)
+            // Set a minimum width enough to show all the toolbar icons.
+                .frame(minWidth: 500, minHeight: 500)
             #endif
         }
         .commands {
